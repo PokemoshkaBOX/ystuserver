@@ -11,7 +11,7 @@ class DidgitalSystemController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('KGroup'), 'KGroup'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'Count'],
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'Count'],
                 [Sequelize.fn('COUNT', Sequelize.col('AppState')), 'AppState']
             ],
             group: ['KGroup'],
@@ -41,7 +41,7 @@ class DidgitalSystemController {
         let data1 = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('KGroup'), 'KGroup'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'Count'],
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'Count'],
                 [Sequelize.fn('COUNT', Sequelize.col('AppState')), 'AppState']
             ],
             group: ['KGroup'],
@@ -152,7 +152,7 @@ class DidgitalSystemController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('D'), 'date'],  // Выбираем дату
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'application'] // Считаем количество заявлений
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'application'] // Считаем количество заявлений
             ],
             group: ['D'], // Группируем по дате
             order: [['D', 'ASC']],  // Сортируем по возрастанию даты
@@ -170,7 +170,7 @@ class DidgitalSystemController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('KGroup'), 'KGroup'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'application']
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'application']
             ],
             group: ['KGroup'], // Группируем по дате
             order: [['application', 'DESC']], // Сортируем по возрастанию даты
@@ -189,7 +189,7 @@ class DidgitalSystemController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('KGroup'), 'KGroup'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'application']
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'application']
             ],
             group: ['KGroup'], // Группируем по дате
             order: [['application', 'DESC']],  // Сортируем по возрастанию даты
@@ -224,7 +224,7 @@ class DidgitalSystemController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('KodFO'), 'KodFO'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'KodTipPK']
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'KodTipPK']
             ],
             group: ['KodFO'],
             order: [['KodFO', 'ASC']],
@@ -242,7 +242,7 @@ class DidgitalSystemController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('KGroup'), 'KGroup'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'Count']
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'Count']
             ],
             group: ['KGroup'],
             order: [['Count', 'DESC']],
@@ -311,7 +311,7 @@ class DidgitalSystemController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('Channel'), 'Channel'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'ID']
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'ID']
             ],
             group: ['Channel'], // Группируем по дате
             order: [['ID', 'DESC']],  // Сортируем по возрастанию даты
@@ -344,7 +344,7 @@ class DidgitalSystemController {
                 `),
                 'BallRange'
               ],
-              [Sequelize.fn('COUNT', Sequelize.col('ID')), 'StudentCount']
+              [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'StudentCount']
             ],
             where: {
                 AvgBall: {
@@ -389,7 +389,7 @@ class DidgitalSystemController {
                 `),
                 'BallRange'
               ],
-              [Sequelize.fn('COUNT', Sequelize.col('ID')), 'StudentCount']
+              [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'StudentCount']
             ],
             where: {
                 AvgBall: {
@@ -422,6 +422,28 @@ class DidgitalSystemController {
           let counts1 = data1.map(item => item.dataValues.StudentCount);
           return res.json({ dates, counts, counts1});
         }
+    async getProba(req, res) {
+        let {SELECT} = req.query
+        let {COUNT} = req.query
+        let {GROUP} = req.query
+        let {WHERE} = req.query
+        let data = await aplicationsv.findAll({
+            attributes: [
+                [Sequelize.literal(SELECT), "data"],
+                [Sequelize.literal(COUNT), "data1"],
+            ],
+            group:[
+                [Sequelize.literal(GROUP)],
+            ],
+            order:[['data', 'ASC']],
+            where:Sequelize.literal(WHERE)
+        });
+        let data1 = data.map(item => item.dataValues.data);
+        let data2 = data.map(item => item.dataValues.data1);
+        console.log(data1, data2)
+        return res.json({data1, data2});
+    }
+
 }
 
 module.exports = new DidgitalSystemController()

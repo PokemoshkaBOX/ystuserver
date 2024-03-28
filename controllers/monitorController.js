@@ -6,7 +6,7 @@ class monitorController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('Institut'), 'Institut'],  // Выбираем дату
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'Count'] // Считаем количество заявлений
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'Count'] // Считаем количество заявлений
             ],
             group: ['Institut'], // Группируем по дате
             order: [['Count', 'DESC']]  // Сортируем по возрастанию даты
@@ -14,7 +14,7 @@ class monitorController {
         let data1 = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('Institut'), 'Institut'],  // Выбираем дату
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'Count'] // Считаем количество заявлений
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'Count'] // Считаем количество заявлений
             ],
             group: ['Institut'], // Группируем по дате
             order: [['Count', 'DESC']],  // Сортируем по возрастанию даты
@@ -89,26 +89,29 @@ class monitorController {
 
     }
 
-    async getApplicationsCountByDate(req, res) {
-        let data = await aplicationsv.findAll({
-            attributes: [
-                [Sequelize.col('D'), 'date'],  // Выбираем дату
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'application'] // Считаем количество заявлений
-            ],
-            group: ['D'], // Группируем по дате
-            order: [['D', 'ASC']]  // Сортируем по возрастанию даты
-        });
-        let counts = data.map(item => item.dataValues.application);
-        let dates = data.map(item => item.dataValues.date);
+   async getApplicationsCountByDate(req, res) {
+       let data = await aplicationsv.findAll({
+           attributes: [
+                    [Sequelize.literal(`CONVERT(date, D)`), 'date'],
+                    [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'application']
+           ],
+           group: [
+               [Sequelize.literal(`CONVERT(date, D)`), 'date'],
+           ], // Группируем по дате
+           order: [['date', 'ASC']],
+       });
 
-        return res.json({dates, counts});
-    }
+       let counts = data.map(item => item.dataValues.application);
+       let dates = data.map(item => item.dataValues.date);
+
+       return res.json({dates, counts});
+   }
 
     async getTable(req, res) {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('KodLevel'), 'KodLevel'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'application']
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'application']
             ],
             group: ['KodLevel'], // Группируем по дате
             order: [['application', 'DESC']], // Сортируем по возрастанию даты
@@ -116,7 +119,7 @@ class monitorController {
         let data1 = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('KodLevel'), 'KodLevel'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'application']
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'application']
             ],
             group: ['KodLevel'], // Группируем по дате
             order: [['application', 'DESC']], // Сортируем по возрастанию даты
@@ -135,7 +138,7 @@ class monitorController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('KGroup'), 'KGroup'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'application']
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'application']
             ],
             where: {
                 [Sequelize.Op.and]: [
@@ -169,7 +172,7 @@ class monitorController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('KodFO'), 'KodFO'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'KodTipPK']
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'KodTipPK']
             ],
             group: ['KodFO'],
             order: [['KodFO', 'ASC']]
@@ -184,7 +187,7 @@ class monitorController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('Osn'), 'Osn'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'KodTipPK']
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'KodTipPK']
             ],
             group: ['Osn'], // Группируем по дате
             order: [['KodTipPK', 'DESC']]  // Сортируем по возрастанию даты
@@ -264,7 +267,7 @@ class monitorController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('Channel'), 'Channel'],
-                [Sequelize.fn('COUNT', Sequelize.col('ID')), 'ID']
+                [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'ID']
             ],
             group: ['Channel'], // Группируем по дате
             order: [['ID', 'DESC']]  // Сортируем по возрастанию даты
@@ -300,7 +303,7 @@ class monitorController {
                 `),
                 'BallRange'
               ],
-              [Sequelize.fn('COUNT', Sequelize.col('ID')), 'StudentCount']
+              [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'StudentCount']
             ],
             where: {
               AvgBall: {
@@ -356,7 +359,7 @@ class monitorController {
                 `),
                 'BallRange'
               ],
-              [Sequelize.fn('COUNT', Sequelize.col('ID')), 'StudentCount']
+              [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'StudentCount']
             ],
             where: {
               AvgBall: {
@@ -399,7 +402,7 @@ class monitorController {
             let data = await aplicationsv.findAll({
                 attributes: [
                     [Sequelize.col('KGroup2'), 'KGroup2'],
-                    [Sequelize.fn('COUNT', Sequelize.col('ID')), 'application']
+                    [Sequelize.fn('COUNT', Sequelize.col('KodFL')), 'application']
                 ],
                 where: {
                     KGroup2: {

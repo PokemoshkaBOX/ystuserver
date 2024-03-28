@@ -7,6 +7,7 @@ module.exports = new Sequelize(
     {
         dialect: 'mssql',
         server: process.env.DB_HOST, // хост
+        host: process.env.DB_HOST,
         port: process.env.DB_PORT, // порт
         define: {
             underscored: true,

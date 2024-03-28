@@ -17,5 +17,5 @@ router.get('/fin/', DidgitalSystemController.getFin)
 router.get('/obl/', DidgitalSystemController.getObl)
 router.get('/chan/', DidgitalSystemController.getChan)
 router.get('/avg/', DidgitalSystemController.getAvgBall)
-
+router.get('/proba/', DidgitalSystemController.getProba)
 module.exports = router
