@@ -1,9 +1,5 @@
-const {institute}  = require('.././model/models')
-const ApiError = require('../error/ApiError')
 const {aplicationsv} = require("../model/models");
 const {Sequelize} = require("sequelize");
-const { QueryTypes } = require('sequelize');
-const db    = require('../db')
 class DidgitalSystemController {
     //функция создания
     async getMonitorZach(req, res) {
@@ -179,7 +175,7 @@ class DidgitalSystemController {
             }
         });
         let counts = data.map(item => item.dataValues.application);
-        let dates = data.map(item => item.dataValues.k_group);
+        let dates = data.map(item => item.dataValues.KGroup);
 
         return res.json({dates, counts});
     }

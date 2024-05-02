@@ -415,9 +415,73 @@ class monitorController {
             });
             let counts = data.map(item => item.dataValues.application);
             let dates = data.map(item => item.dataValues.KGroup2);
-            console.log(dates, counts)
+            console.log("counts: ", counts, "dates:", dates)
             return res.json({dates, counts});
         }
+
+        async getAllObl(req, res) {
+        let data = await aplicationsv.findAll({
+            attributes: [
+                [
+                    Sequelize.literal(`
+                CASE 
+                    WHEN Addr LIKE 'РОССИЯ,%' THEN 
+                        SUBSTRING(Addr, CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) + 2, 
+                                  CASE 
+                                      WHEN CHARINDEX(',', Addr, CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) + 1) - CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - 2 < 0 
+                                      THEN 0 
+                                      ELSE CHARINDEX(',', Addr, CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) + 1) - CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - 2 
+                                  END) 
+                    ELSE 
+                        SUBSTRING(Addr, CHARINDEX(',', Addr) + 2, 
+                                  CASE 
+                                      WHEN CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - CHARINDEX(',', Addr) - 2 < 0 
+                                      THEN 0 
+                                      ELSE CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - CHARINDEX(',', Addr) - 2 
+                                  END) 
+                END
+            `),
+                    'region'
+                ],
+                [Sequelize.fn('COUNT', Sequelize.col('*')), 'count']
+            ],
+            where: {
+                [Sequelize.Op.or]: [
+                    {Addr: {[Sequelize.Op.like]: 'РОССИЯ,%'}},
+                    {Addr: {[Sequelize.Op.notLike]: 'РОССИЯ,%'}}
+                ]
+            },
+            group: [
+                Sequelize.literal(`
+            CASE 
+                WHEN Addr LIKE 'РОССИЯ,%' THEN 
+                    SUBSTRING(addr, CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) + 2, 
+                              CASE 
+                                  WHEN CHARINDEX(',', Addr, CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) + 1) - CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - 2 < 0 
+                                  THEN 0 
+                                  ELSE CHARINDEX(',', Addr, CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) + 1) - CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - 2 
+                              END) 
+                ELSE 
+                    SUBSTRING(addr, CHARINDEX(',', Addr) + 2, 
+                              CASE 
+                                  WHEN CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - CHARINDEX(',', Addr) - 2 < 0 
+                                  THEN 0 
+                                  ELSE CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - CHARINDEX(',', Addr) - 2 
+                              END) 
+            END
+        `)
+            ],
+            having: Sequelize.literal('COUNT(*) > 0'),
+            order: [
+                [Sequelize.literal('count'), 'DESC']
+            ],
+        });
+
+        let counts = data.map(item => item.dataValues.count);
+        let dates = data.map(item => item.dataValues.region);
+
+        return res.json({dates, counts});
+    }
 }
 
 module.exports = new monitorController()
