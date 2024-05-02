@@ -1,9 +1,5 @@
-const {institute}  = require('.././model/models')
-const ApiError = require('../error/ApiError')
 const {aplicationsv} = require("../model/models");
 const {Sequelize} = require("sequelize");
-const { QueryTypes } = require('sequelize');
-const db    = require('../db')
 class DidgitalSystemController {
     //функция создания
     async getMonitorZach(req, res) {
@@ -179,7 +175,7 @@ class DidgitalSystemController {
             }
         });
         let counts = data.map(item => item.dataValues.application);
-        let dates = data.map(item => item.dataValues.k_group);
+        let dates = data.map(item => item.dataValues.KGroup);
 
         return res.json({dates, counts});
     }
@@ -277,25 +273,25 @@ class DidgitalSystemController {
         let data = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('KGroup'), 'KGroup'], // Включаем название группы
-                [Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.cast(Sequelize.col('AvgBall'), 'float')), 1), 'AvgBall']// Вычисляем средний балл для каждой группы
+                [Sequelize.literal('ROUND(AVG(NULLIF(AvgBall, 0)), 1)'), 'AvgBall']// Вычисляем средний балл для каждой группы
             ],
             group: ['KGroup'], // Группируем по названию группы
             order: [['AvgBall', 'DESC']],  // Сортируем по убыванию среднего балла
             where: {
                 Inst: Inst,
-                AvgBall: {[Sequelize.Op.ne]: 'NULL'}
+                AvgBall: {[Sequelize.Op.ne]: null}
             }
         });
         let data1 = await aplicationsv.findAll({
             attributes: [
                 [Sequelize.col('KGroup'), 'KGroup'], // Включаем название группы
-                [Sequelize.fn('ROUND', Sequelize.fn('AVG', Sequelize.cast(Sequelize.col('AvgBall'), 'float')), 1), 'AvgBall']// Вычисляем средний балл для каждой группы
+                [Sequelize.literal('ROUND(AVG(NULLIF(AvgBall, 0)), 1)'), 'AvgBall']// Вычисляем средний балл для каждой группы
             ],
             group: ['KGroup'], // Группируем по названию группы
             order: [['AvgBall', 'DESC']],  // Сортируем по убыванию среднего балла
             where: {
                 Inst: Inst,
-                AvgBall: {[Sequelize.Op.ne]: 'NULL'},
+                AvgBall: {[Sequelize.Op.ne]: null},
                 AppState: 'Подано'
             }
         });
@@ -330,15 +326,15 @@ class DidgitalSystemController {
               [
                 Sequelize.literal(`
                   CASE 
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 45 AND 50 THEN '45-50'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 50 AND 55 THEN '50-55'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 55 AND 60 THEN '55-60'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 60 AND 65 THEN '60-65'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 65 AND 70 THEN '65-70'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 70 AND 85 THEN '70-85'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 85 AND 90 THEN '85-90'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 90 AND 95 THEN '90-95'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 95 AND 100 THEN '95-100'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 45 AND 50 THEN '45-50'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 50 AND 55 THEN '50-55'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 55 AND 60 THEN '55-60'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 60 AND 65 THEN '60-65'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 65 AND 70 THEN '65-70'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 70 AND 85 THEN '70-85'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 85 AND 90 THEN '85-90'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 90 AND 95 THEN '90-95'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 95 AND 100 THEN '95-100'
                     ELSE NULL
                   END
                 `),
@@ -348,23 +344,23 @@ class DidgitalSystemController {
             ],
             where: {
                 AvgBall: {
-                    [Sequelize.Op.ne]: 'NULL'
+                    [Sequelize.Op.ne]: null
                 },
                 Inst: Inst
             },
             group: [
               Sequelize.literal(`
                 CASE 
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 45 AND 50 THEN '45-50'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 50 AND 55 THEN '50-55'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 55 AND 60 THEN '55-60'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 60 AND 65 THEN '60-65'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 65 AND 70 THEN '65-70'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 70 AND 85 THEN '70-85'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 85 AND 90 THEN '85-90'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 90 AND 95 THEN '90-95'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 95 AND 100 THEN '95-100'
-                  ELSE NULL
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 45 AND 50 THEN '45-50'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 50 AND 55 THEN '50-55'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 55 AND 60 THEN '55-60'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 60 AND 65 THEN '60-65'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 65 AND 70 THEN '65-70'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 70 AND 85 THEN '70-85'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 85 AND 90 THEN '85-90'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 90 AND 95 THEN '90-95'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 95 AND 100 THEN '95-100'
+                    ELSE NULL
                 END
               `)
             ],
@@ -375,15 +371,15 @@ class DidgitalSystemController {
               [
                 Sequelize.literal(`
                   CASE 
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 45 AND 50 THEN '45-50'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 50 AND 55 THEN '50-55'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 55 AND 60 THEN '55-60'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 60 AND 65 THEN '60-65'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 65 AND 70 THEN '65-70'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 70 AND 85 THEN '70-85'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 85 AND 90 THEN '85-90'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 90 AND 95 THEN '90-95'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 95 AND 100 THEN '95-100'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 45 AND 50 THEN '45-50'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 50 AND 55 THEN '50-55'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 55 AND 60 THEN '55-60'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 60 AND 65 THEN '60-65'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 65 AND 70 THEN '65-70'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 70 AND 85 THEN '70-85'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 85 AND 90 THEN '85-90'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 90 AND 95 THEN '90-95'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 95 AND 100 THEN '95-100'
                     ELSE NULL
                   END
                 `),
@@ -393,7 +389,7 @@ class DidgitalSystemController {
             ],
             where: {
                 AvgBall: {
-                    [Sequelize.Op.ne]: 'NULL'
+                    [Sequelize.Op.ne]: null
                 },
                 Inst: Inst,
                 AppState: 'Подано'
@@ -401,16 +397,16 @@ class DidgitalSystemController {
             group: [
               Sequelize.literal(`
                 CASE 
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 45 AND 50 THEN '45-50'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 50 AND 55 THEN '50-55'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 55 AND 60 THEN '55-60'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 60 AND 65 THEN '60-65'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 65 AND 70 THEN '65-70'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 70 AND 85 THEN '70-85'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 85 AND 90 THEN '85-90'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 90 AND 95 THEN '90-95'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 95 AND 100 THEN '95-100'
-                  ELSE NULL
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 45 AND 50 THEN '45-50'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 50 AND 55 THEN '50-55'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 55 AND 60 THEN '55-60'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 60 AND 65 THEN '60-65'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 65 AND 70 THEN '65-70'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 70 AND 85 THEN '70-85'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 85 AND 90 THEN '85-90'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 90 AND 95 THEN '90-95'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 95 AND 100 THEN '95-100'
+                    ELSE NULL
                 END
               `)
             ],

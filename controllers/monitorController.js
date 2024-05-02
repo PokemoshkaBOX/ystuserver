@@ -283,22 +283,20 @@ class monitorController {
               [
                 Sequelize.literal(`
                   CASE 
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 25 AND 30 THEN '25-30'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 30 AND 35 THEN '30-35'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 35 AND 40 THEN '35-40'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 40 AND 45 THEN '40-45'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 45 AND 50 THEN '45-50'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 50 AND 55 THEN '50-55'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 55 AND 60 THEN '55-60'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 60 AND 65 THEN '60-65'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 65 AND 70 THEN '65-70'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 70 AND 75 THEN '70-75'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 75 AND 80 THEN '75-80'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 80 AND 85 THEN '80-85'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 85 AND 90 THEN '85-90'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 90 AND 95 THEN '90-95'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 95 AND 100 THEN '95-100'
-                    
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 25 AND 30 THEN '25-30'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 30 AND 35 THEN '30-35'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 35 AND 40 THEN '35-40'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 40 AND 45 THEN '40-45'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 45 AND 50 THEN '45-50'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 50 AND 55 THEN '50-55'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 55 AND 60 THEN '55-60'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 60 AND 65 THEN '60-65'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 65 AND 70 THEN '65-70'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 70 AND 85 THEN '70-85'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 85 AND 90 THEN '85-90'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 90 AND 95 THEN '90-95'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 95 AND 100 THEN '95-100'
+                    ELSE NULL 
                   END
                 `),
                 'BallRange'
@@ -307,28 +305,26 @@ class monitorController {
             ],
             where: {
               AvgBall: {
-                [Sequelize.Op.ne]: 'NULL'
+                [Sequelize.Op.ne]: null
               }
             },
             group: [
               Sequelize.literal(`
                 CASE 
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 25 AND 30 THEN '25-30'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 30 AND 35 THEN '30-35'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 35 AND 40 THEN '35-40'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 40 AND 45 THEN '40-45'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 45 AND 50 THEN '45-50'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 50 AND 55 THEN '50-55'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 55 AND 60 THEN '55-60'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 60 AND 65 THEN '60-65'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 65 AND 70 THEN '65-70'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 70 AND 75 THEN '70-75'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 75 AND 80 THEN '75-80'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 80 AND 85 THEN '80-85'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 85 AND 90 THEN '85-90'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 90 AND 95 THEN '90-95'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 95 AND 100 THEN '95-100'
-                  ELSE NULL
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 25 AND 30 THEN '25-30'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 30 AND 35 THEN '30-35'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 35 AND 40 THEN '35-40'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 40 AND 45 THEN '40-45'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 45 AND 50 THEN '45-50'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 50 AND 55 THEN '50-55'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 55 AND 60 THEN '55-60'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 60 AND 65 THEN '60-65'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 65 AND 70 THEN '65-70'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 70 AND 85 THEN '70-85'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 85 AND 90 THEN '85-90'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 90 AND 95 THEN '90-95'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 95 AND 100 THEN '95-100'
+                    ELSE NULL
                 END
               `)
             ],
@@ -339,21 +335,19 @@ class monitorController {
               [
                 Sequelize.literal(`
                   CASE 
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 25 AND 30 THEN '25-30'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 30 AND 35 THEN '30-35'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 35 AND 40 THEN '35-40'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 40 AND 45 THEN '40-45'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 45 AND 50 THEN '45-50'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 50 AND 55 THEN '50-55'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 55 AND 60 THEN '55-60'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 60 AND 65 THEN '60-65'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 65 AND 70 THEN '65-70'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 70 AND 75 THEN '70-75'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 75 AND 80 THEN '75-80'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 80 AND 85 THEN '80-85'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 85 AND 90 THEN '85-90'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 90 AND 95 THEN '90-95'
-                    WHEN TRY_CONVERT(float, AvgBall) BETWEEN 95 AND 100 THEN '95-100'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 25 AND 30 THEN '25-30'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 30 AND 35 THEN '30-35'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 35 AND 40 THEN '35-40'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 40 AND 45 THEN '40-45'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 45 AND 50 THEN '45-50'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 50 AND 55 THEN '50-55'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 55 AND 60 THEN '55-60'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 60 AND 65 THEN '60-65'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 65 AND 70 THEN '65-70'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 70 AND 85 THEN '70-85'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 85 AND 90 THEN '85-90'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 90 AND 95 THEN '90-95'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 95 AND 100 THEN '95-100'
                     ELSE NULL
                   END
                 `),
@@ -363,29 +357,27 @@ class monitorController {
             ],
             where: {
               AvgBall: {
-                [Sequelize.Op.ne]: 'NULL'
+                [Sequelize.Op.ne]: null
               },
               AppState: 'Подано'
             },
             group: [
               Sequelize.literal(`
                 CASE 
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 25 AND 30 THEN '25-30'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 30 AND 35 THEN '30-35'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 35 AND 40 THEN '35-40'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 40 AND 45 THEN '40-45'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 45 AND 50 THEN '45-50'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 50 AND 55 THEN '50-55'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 55 AND 60 THEN '55-60'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 60 AND 65 THEN '60-65'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 65 AND 70 THEN '65-70'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 70 AND 75 THEN '70-75'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 75 AND 80 THEN '75-80'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 80 AND 85 THEN '80-85'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 85 AND 90 THEN '85-90'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 90 AND 95 THEN '90-95'
-                  WHEN TRY_CONVERT(float, AvgBall) BETWEEN 95 AND 100 THEN '95-100'
-                  ELSE NULL
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 25 AND 30 THEN '25-30'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 30 AND 35 THEN '30-35'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 35 AND 40 THEN '35-40'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 40 AND 45 THEN '40-45'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 45 AND 50 THEN '45-50'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 50 AND 55 THEN '50-55'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 55 AND 60 THEN '55-60'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 60 AND 65 THEN '60-65'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 65 AND 70 THEN '65-70'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 70 AND 85 THEN '70-85'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 85 AND 90 THEN '85-90'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 90 AND 95 THEN '90-95'
+                    WHEN COALESCE(AvgBall, 0) BETWEEN 95 AND 100 THEN '95-100'
+                    ELSE NULL
                 END
               `)
             ],
@@ -415,9 +407,73 @@ class monitorController {
             });
             let counts = data.map(item => item.dataValues.application);
             let dates = data.map(item => item.dataValues.KGroup2);
-            console.log(dates, counts)
+            console.log("counts: ", counts, "dates:", dates)
             return res.json({dates, counts});
         }
+
+        async getAllObl(req, res) {
+        let data = await aplicationsv.findAll({
+            attributes: [
+                [
+                    Sequelize.literal(`
+                CASE 
+                    WHEN Addr LIKE 'РОССИЯ,%' THEN 
+                        SUBSTRING(Addr, CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) + 2, 
+                                  CASE 
+                                      WHEN CHARINDEX(',', Addr, CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) + 1) - CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - 2 < 0 
+                                      THEN 0 
+                                      ELSE CHARINDEX(',', Addr, CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) + 1) - CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - 2 
+                                  END) 
+                    ELSE 
+                        SUBSTRING(Addr, CHARINDEX(',', Addr) + 2, 
+                                  CASE 
+                                      WHEN CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - CHARINDEX(',', Addr) - 2 < 0 
+                                      THEN 0 
+                                      ELSE CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - CHARINDEX(',', Addr) - 2 
+                                  END) 
+                END
+            `),
+                    'region'
+                ],
+                [Sequelize.fn('COUNT', Sequelize.col('*')), 'count']
+            ],
+            where: {
+                [Sequelize.Op.or]: [
+                    {Addr: {[Sequelize.Op.like]: 'РОССИЯ,%'}},
+                    {Addr: {[Sequelize.Op.notLike]: 'РОССИЯ,%'}}
+                ]
+            },
+            group: [
+                Sequelize.literal(`
+            CASE 
+                WHEN Addr LIKE 'РОССИЯ,%' THEN 
+                    SUBSTRING(addr, CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) + 2, 
+                              CASE 
+                                  WHEN CHARINDEX(',', Addr, CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) + 1) - CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - 2 < 0 
+                                  THEN 0 
+                                  ELSE CHARINDEX(',', Addr, CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) + 1) - CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - 2 
+                              END) 
+                ELSE 
+                    SUBSTRING(addr, CHARINDEX(',', Addr) + 2, 
+                              CASE 
+                                  WHEN CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - CHARINDEX(',', Addr) - 2 < 0 
+                                  THEN 0 
+                                  ELSE CHARINDEX(',', Addr, CHARINDEX(',', Addr) + 1) - CHARINDEX(',', Addr) - 2 
+                              END) 
+            END
+        `)
+            ],
+            having: Sequelize.literal('COUNT(*) > 0'),
+            order: [
+                [Sequelize.literal('count'), 'DESC']
+            ],
+        });
+
+        let counts = data.map(item => item.dataValues.count);
+        let dates = data.map(item => item.dataValues.region);
+
+        return res.json({dates, counts});
+    }
 }
 
 module.exports = new monitorController()
